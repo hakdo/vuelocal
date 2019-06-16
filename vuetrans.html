@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <!-- Import VueJS in dev version from CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <title>Vue Translation</title>
+    </head>
+    <body>
+        <div id="app">
+            <h1>
+                {{ get_text('hello') }}
+            </h1>
+            <button @click="setlocale('en')">EN</button>
+            <button @click="setlocale('no')">NO</button>
+            <button @click="setlocale('de')">DE</button>
+            <p>Your locale setting is <strong>{{ locale.toUpperCase() }}</strong></p>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello Vue!',
+                    translations: {
+                        en: {
+                            "hello": "Hello World"
+                        },
+                        no: {
+                            "hello": "Hallo Verden"
+                        },
+                        de: {
+                            "hello": "Guten Tag, Welt"
+                        }
+                    },
+                    locale: 'en'
+                },
+                methods: {
+                    get_text (textbit) {
+                        return this.translations[this.locale][textbit]
+                    },
+                    setlocale (lang) {
+                        this.locale = lang
+                        localStorage.setItem('locale', lang)
+                    },
+                    getlocale () {
+                        if (localStorage.getItem('locale')) {
+                            var lang = localStorage.getItem('locale')
+                            if (['no', 'en', 'de'].indexOf(lang) > - 1) {
+                                this.locale = lang
+                            } else {
+                                this.locale = 'en' // fallback locale set to English
+                            }
+                        }
+                    }
+                },
+                mounted () {
+                    this.getlocale()
+                }
+            })
+        </script>
+    </body>
+</html>
